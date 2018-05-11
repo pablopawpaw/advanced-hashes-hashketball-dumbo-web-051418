@@ -118,22 +118,12 @@ end
 
 def num_points_scored(player_name)
   game_hash.collect { |h_a, team|
-    team.collect { |details, stats|
-      if details == :players
-        stats.collect { |name, value|
-          if name == player_name
-            value.collect { |stat, stat_v|
-              if stat == :points
-                return stat_v
-              end 
-            }
-          end 
+    team[:players].collect { |name, stats|
+        if name == player_name
+          return stats[:points]
+        end 
         }
-      else 
-        false
-      end 
     }
-  }
 end 
 
 def shoe_size(player_name)
@@ -409,5 +399,37 @@ def long_name_steals_a_ton?
   else 
     false 
   end 
+
+end
+
+def player_by_number(num)
+  #first find players' number 
+  #figure out who the number is for 
+  #return player name of num
+  
+  game_hash.collect do |h_a, category|
+    category[:players].collect do |name, stats|
+      if stats[:number] == num
+        return name
+      end 
+    end 
+  end
+  
   
 end 
+
+def new_player_by_number(num)
+  #get full list of players
+  players_hash = game_hash[:home][:players].merge(game_hash[:away][:players])
+  
+  #first find players' number 
+  player_result = players_hash.find do |name, stats|
+    stats[:number] == num
+  end
+  
+  #figure out who the number is for 
+  
+  #return player name of num
+  player_result.first
+  
+end
